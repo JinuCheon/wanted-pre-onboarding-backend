@@ -17,6 +17,7 @@ class MemberSignUpTest {
     @BeforeEach
     void setUp() {
         memberRepository = new MemberRepository();
+        memberAdaptor = new MemberPort(memberRepository);
     }
 
     @Test
@@ -36,22 +37,37 @@ class MemberSignUpTest {
     }
 
     private class MemberRepository {
-        private final HashMap<Long, Member> member = new HashMap<>();
+        private final HashMap<Long, Member> members = new HashMap<>();
         private Long sequence = 0L;
         public List<Member> findAll() {
-            return List.copyOf(member.values());
+            return List.copyOf(members.values());
+        }
+
+        public Member save(final Member member) {
+            sequence++;
+            members.put(sequence, member);
+            return member;
         }
     }
 
     private class Member {
+        private final String nickname;
+        private final String email;
+        private final String password;
+
+        public Member(final String nickname, final String email, final String password) {
+            this.nickname = nickname;
+            this.email = email;
+            this.password = password;
+        }
     }
 
-    public record MemberSignUpRequest(String nickname, String email, String password) {
+    public record MemberSignUpRequest(
+            String nickname,
+            String email,
+            String password
+    ) {
         public MemberSignUpRequest {
-            validateConstructor();
-        }
-
-        private void validateConstructor() {
             Assert.hasText(nickname, "닉네임은 필수입니다.");
             Assert.hasText(email, "이메일은 필수입니다.");
             if (!email.contains("@")) {
@@ -63,5 +79,22 @@ class MemberSignUpTest {
             }
         }
     }
+
+    private interface MemberAdaptor {
+        void signUp(MemberSignUpRequest request);
+    }
+
+    private class MemberPort implements MemberAdaptor {
+        private final MemberRepository memberRepository;
+
+        public MemberPort(final MemberRepository memberRepository) {
             this.memberRepository = memberRepository;
+        }
+
+        @Override
+        public void signUp(final MemberSignUpRequest request) {
+            final Member member = new Member(request.nickname, request.email, request.password);
+            memberRepository.save(member);
+        }
+    }
 }
