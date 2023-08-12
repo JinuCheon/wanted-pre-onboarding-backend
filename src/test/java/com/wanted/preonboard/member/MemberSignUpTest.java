@@ -3,21 +3,17 @@ package com.wanted.preonboard.member;
 import com.wanted.preonboard.member.application.MemberService;
 import com.wanted.preonboard.member.domain.MemberRepository;
 import com.wanted.preonboard.member.dto.request.MemberSignUpRequest;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SpringBootTest
 class MemberSignUpTest {
 
-    private MemberRepository memberRepository;
-    private MemberService memberService;
-
-    @BeforeEach
-    void setUp() {
-        memberRepository = new MemberRepository();
-        memberService = new MemberService(memberRepository);
-    }
+    @Autowired private MemberRepository memberRepository;
+    @Autowired private MemberService memberService;
 
     @Test
     void signUp() {
