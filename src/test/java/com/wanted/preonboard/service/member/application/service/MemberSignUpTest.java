@@ -1,4 +1,4 @@
-package com.wanted.preonboard.service.member.presentation;
+package com.wanted.preonboard.service.member.application.service;
 
 import org.antlr.v4.runtime.tree.pattern.ParseTreePattern;
 import org.junit.jupiter.api.BeforeEach;
