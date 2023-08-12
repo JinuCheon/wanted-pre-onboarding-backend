@@ -93,8 +93,13 @@ class MemberSignUpTest {
 
         @Override
         public void signUp(final MemberSignUpRequest request) {
-            final Member member = new Member(request.nickname, request.email, request.password);
+            final String encryptPassword = encryptPasswordByHash256(request.password);
+            final Member member = new Member(request.nickname, request.email, encryptPassword);
             memberRepository.save(member);
+        }
+
+        private String encryptPasswordByHash256(final String password) {
+            return password;
         }
     }
 }
