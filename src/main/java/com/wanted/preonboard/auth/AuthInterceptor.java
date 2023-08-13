@@ -30,11 +30,10 @@ public class AuthInterceptor implements HandlerInterceptor {
         }
 
         if (accessToken != null) {
-            UserContext.CONTEXT.set(authService.validateAndGetUserId(accessToken));
+            UserContext.CONTEXT.set(authService.validateJwt(accessToken));
         }
 
         log.info("유저 로그인 정보: {}", UserContext.CONTEXT.get());
         return true;
     }
-}
 }
