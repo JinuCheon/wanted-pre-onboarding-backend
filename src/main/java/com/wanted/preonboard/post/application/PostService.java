@@ -4,14 +4,14 @@ import com.wanted.preonboard.member.domain.Member;
 import com.wanted.preonboard.post.domain.Post;
 import com.wanted.preonboard.post.domain.PostRepository;
 import com.wanted.preonboard.post.dto.request.CreatePostRequest;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
+@Service
+@RequiredArgsConstructor
 public class PostService {
+
     private final PostRepository postRepository;
-
-    public PostService(final PostRepository postRepository) {
-        this.postRepository = postRepository;
-    }
-
 
     public void createPost(final Long memberId, final CreatePostRequest request) {
         final Member member = new Member(

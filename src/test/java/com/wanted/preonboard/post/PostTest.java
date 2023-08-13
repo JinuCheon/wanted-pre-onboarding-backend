@@ -5,19 +5,16 @@ import com.wanted.preonboard.post.domain.PostRepository;
 import com.wanted.preonboard.post.dto.request.CreatePostRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SpringBootTest
 class PostTest {
 
-    private PostRepository postRepository;
-    private PostService postService;
-
-    @BeforeEach
-    void setUp() {
-        postRepository = new PostRepository();
-        postService = new PostService(postRepository);
-    }
+    @Autowired private PostRepository postRepository;
+    @Autowired private PostService postService;
 
     @Test
     void createPost() {
