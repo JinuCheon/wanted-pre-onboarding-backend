@@ -1,5 +1,6 @@
 package com.wanted.preonboard.member.domain;
 
+import com.google.common.annotations.VisibleForTesting;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -34,6 +35,14 @@ public class Member {
     private String password;
 
     public Member(final String nickname, final String email, final String password) {
+        this.nickname = nickname;
+        this.email = email;
+        this.password = password;
+    }
+
+    @VisibleForTesting
+    public Member(final Long id, final String nickname, final String email, final String password) {
+        this.id = id;
         this.nickname = nickname;
         this.email = email;
         this.password = password;

@@ -1,5 +1,6 @@
 package com.wanted.preonboard.post;
 
+import com.wanted.preonboard.member.domain.Member;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.Assert;
@@ -26,7 +27,8 @@ class PostTest {
                 "title",
                 "content"
         );
-        postService.createPost(request);
+        final Long memberId = 1L;
+        postService.createPost(memberId, request);
         assertThat(postRepository.findAll()).hasSize(1);
     }
 
@@ -38,10 +40,15 @@ class PostTest {
         }
 
 
-        public void createPost(final CreatePostRequest request) {
-            final Long memberId = 1L;
-            final Post post = new Post(
+        public void createPost(final Long memberId, final CreatePostRequest request) {
+            final Member member = new Member(
                     memberId,
+                    "nickname",
+                    "email",
+                    "password"
+            );
+            final Post post = new Post(
+                    member,
                     request.title(),
                     request.content()
             );
@@ -51,22 +58,24 @@ class PostTest {
 
     private class PostRepository {
         HashMap<Long, Post> posts = new HashMap<>();
+        Long sequence = 1L;
+
         public List<Post> findAll() {
             return List.copyOf(posts.values());
         }
 
         public void save(final Post post) {
-            posts.put(post.memberId, post);
+            posts.put(sequence++, post);
         }
     }
 
     private class Post {
-        private final Long memberId;
+        private final Member member;
         private final String title;
         private final String content;
 
-        public Post(final Long memberId, final String title, final String content) {
-            this.memberId = memberId;
+        public Post(final Member member, final String title, final String content) {
+            this.member = member;
             this.title = title;
             this.content = content;
         }
