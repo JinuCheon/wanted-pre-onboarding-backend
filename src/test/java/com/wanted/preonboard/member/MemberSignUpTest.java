@@ -1,6 +1,6 @@
 package com.wanted.preonboard.member;
 
-import com.wanted.preonboard.member.application.MemberService;
+import com.wanted.preonboard.common.ApiTest;
 import com.wanted.preonboard.member.domain.MemberRepository;
 import com.wanted.preonboard.member.dto.request.MemberSignUpRequest;
 import io.restassured.RestAssured;
@@ -12,11 +12,9 @@ import org.springframework.http.HttpStatus;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
-class MemberSignUpTest {
+class MemberSignUpTest extends ApiTest {
 
     @Autowired private MemberRepository memberRepository;
-    @Autowired private MemberService memberService;
 
     @Test
     void signUp() {
