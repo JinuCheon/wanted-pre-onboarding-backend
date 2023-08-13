@@ -3,9 +3,12 @@ package com.wanted.preonboard.member;
 import com.wanted.preonboard.member.application.MemberService;
 import com.wanted.preonboard.member.domain.MemberRepository;
 import com.wanted.preonboard.member.dto.request.MemberSignUpRequest;
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -26,7 +29,13 @@ class MemberSignUpTest {
                 email,
                 password
         );
-        memberService.signUp(request);
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when()
+                .post("/members/sign-up")
+                .then().log().all()
+                .statusCode(HttpStatus.CREATED.value());
 
         assertThat(memberRepository.findAll()).hasSize(1);
     }
