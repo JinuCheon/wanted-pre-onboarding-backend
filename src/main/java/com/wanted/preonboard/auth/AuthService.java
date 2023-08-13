@@ -40,6 +40,22 @@ public class AuthService {
                 .signWith(SignatureAlgorithm.HS256, Base64.getEncoder().encodeToString(secretKey.getBytes()))
                 .compact();
     }
+
+    public Long validateJwt(final String accessToken) {
+        try {
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(secretKey.getBytes())
+                    .build()
+                    .parseClaimsJws(accessToken)
+                    .getBody();
+            return Long.valueOf((String) claims.get("memberId"));
+        } catch (ExpiredJwtException e) {
+            log.info("JwtTokenServiceImpl|Token expired: {}", accessToken, e);
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "토큰이 만료되었습니다.");
+        } catch (Exception e) {
+            log.warn("JwtTokenServiceImpl|Token Exception: {}", accessToken, e);
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "토큰이 유효하지 않습니다.");
+        }
     }
 
 }
