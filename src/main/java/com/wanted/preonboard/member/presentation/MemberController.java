@@ -1,6 +1,8 @@
 package com.wanted.preonboard.member.presentation;
 
+import com.wanted.preonboard.auth.Auth;
 import com.wanted.preonboard.auth.AuthService;
+import com.wanted.preonboard.auth.UserContext;
 import com.wanted.preonboard.member.application.MemberService;
 import com.wanted.preonboard.member.dto.request.MemberSignInRequest;
 import com.wanted.preonboard.member.dto.request.MemberSignUpRequest;
@@ -31,6 +33,13 @@ public class MemberController {
     public ResponseEntity<String> signIn(@RequestBody @Valid MemberSignInRequest request) {
         final Long memberId = memberService.signIn(request);
         return ResponseEntity.ok(authService.createToken(memberId));
+    }
+
+    @Auth
+    @PostMapping("/test")
+    public ResponseEntity<Void> test() {
+        System.out.println("UserContext.CONTEXT.get() = " + UserContext.CONTEXT.get());
+        return ResponseEntity.ok().build();
     }
 
 }
