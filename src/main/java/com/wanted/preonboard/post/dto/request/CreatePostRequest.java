@@ -1,4 +1,4 @@
-package com.wanted.preonboard.post;
+package com.wanted.preonboard.post.dto.request;
 
 import org.springframework.util.Assert;
 

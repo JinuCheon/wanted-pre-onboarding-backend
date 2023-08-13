@@ -1,4 +1,4 @@
-package com.wanted.preonboard.post;
+package com.wanted.preonboard.post.domain;
 
 import com.wanted.preonboard.member.domain.Member;
 

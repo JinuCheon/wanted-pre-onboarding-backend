@@ -1,5 +1,8 @@
 package com.wanted.preonboard.post;
 
+import com.wanted.preonboard.post.application.PostService;
+import com.wanted.preonboard.post.domain.PostRepository;
+import com.wanted.preonboard.post.dto.request.CreatePostRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
