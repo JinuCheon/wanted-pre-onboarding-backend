@@ -13,3 +13,7 @@ spring:
         format_sql: true
         show_sql: true
         default_batch_fetch_size: 1000
+
+jwt:
+  secret-key: secretsecretsecretsecretsecretsecretsecretsecret
+  expiration-hours: 24
