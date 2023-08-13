@@ -35,11 +35,4 @@ public class MemberController {
         return ResponseEntity.ok(authService.createToken(memberId));
     }
 
-    @Auth
-    @PostMapping("/test")
-    public ResponseEntity<Void> test() {
-        System.out.println("UserContext.CONTEXT.get() = " + UserContext.CONTEXT.get());
-        return ResponseEntity.ok().build();
-    }
-
 }
