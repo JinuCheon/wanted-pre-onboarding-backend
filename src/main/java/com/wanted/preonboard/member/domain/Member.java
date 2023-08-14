@@ -1,5 +1,6 @@
 package com.wanted.preonboard.member.domain;
 
+import com.google.common.annotations.VisibleForTesting;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,6 +11,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
+import org.springframework.util.Assert;
 
 @Entity
 @Table(name = "member")
@@ -34,6 +36,21 @@ public class Member {
     private String password;
 
     public Member(final String nickname, final String email, final String password) {
+        validateConstructor(nickname, email, password);
+        this.nickname = nickname;
+        this.email = email;
+        this.password = password;
+    }
+
+    private static void validateConstructor(final String nickname, final String email, final String password) {
+        Assert.hasText(nickname, "nickname must not be empty");
+        Assert.hasText(email, "email must not be empty");
+        Assert.hasText(password, "password must not be empty");
+    }
+
+    @VisibleForTesting
+    public Member(final Long id, final String nickname, final String email, final String password) {
+        this.id = id;
         this.nickname = nickname;
         this.email = email;
         this.password = password;

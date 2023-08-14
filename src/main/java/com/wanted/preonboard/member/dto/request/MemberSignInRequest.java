@@ -1,10 +1,10 @@
 package com.wanted.preonboard.member.dto.request;
 
-import org.springframework.util.Assert;
+import jakarta.validation.constraints.NotBlank;
 
-public record MemberSignInRequest(String email, String password) {
-    public MemberSignInRequest {
-        Assert.hasText(email, "이메일은 필수입니다.");
-        Assert.hasText(password, "비밀번호는 필수입니다.");
-    }
+public record MemberSignInRequest(
+        @NotBlank(message = "이메일은 필수입니다.")
+        String email,
+        @NotBlank(message = "비밀번호는 필수입니다.")
+        String password) {
 }

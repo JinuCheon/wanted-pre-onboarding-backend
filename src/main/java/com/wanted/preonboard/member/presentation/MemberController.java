@@ -6,6 +6,7 @@ import com.wanted.preonboard.auth.UserContext;
 import com.wanted.preonboard.member.application.MemberService;
 import com.wanted.preonboard.member.dto.request.MemberSignInRequest;
 import com.wanted.preonboard.member.dto.request.MemberSignUpRequest;
+import com.wanted.preonboard.member.dto.response.SignInResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,7 +31,7 @@ public class MemberController {
     }
 
     @PostMapping("/sign-in")
-    public ResponseEntity<String> signIn(@RequestBody @Valid MemberSignInRequest request) {
+    public ResponseEntity<SignInResponse> signIn(@RequestBody @Valid MemberSignInRequest request) {
         final Long memberId = memberService.signIn(request);
         return ResponseEntity.ok(authService.createToken(memberId));
     }

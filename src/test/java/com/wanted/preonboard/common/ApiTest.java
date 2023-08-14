@@ -2,6 +2,7 @@ package com.wanted.preonboard.common;
 
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -14,6 +15,7 @@ public class ApiTest {
     @Autowired
     DatabaseCleaner databaseCleaner;
 
+    @Order(1)
     @BeforeEach
     void setUp() {
         if(RestAssured.UNDEFINED_PORT == RestAssured.port) {

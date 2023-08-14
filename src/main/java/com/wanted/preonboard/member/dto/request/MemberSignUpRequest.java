@@ -1,21 +1,15 @@
 package com.wanted.preonboard.member.dto.request;
 
-import org.springframework.util.Assert;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 public record MemberSignUpRequest(
+        @NotBlank(message = "닉네임은 필수입니다.")
         String nickname,
+        @Email(message = "이메일 형식이 올바르지 않습니다.")
         String email,
-        String password
-) {
-    public MemberSignUpRequest {
-        Assert.hasText(nickname, "닉네임은 필수입니다.");
-        Assert.hasText(email, "이메일은 필수입니다.");
-        if (!email.contains("@")) {
-            throw new IllegalArgumentException("이메일 형식이 올바르지 않습니다.");
-        }
-        Assert.hasText(password, "비밀번호는 필수입니다.");
-        if (password.length() < 8) {
-            throw new IllegalArgumentException("비밀번호는 8자리 이상이어야 합니다.");
-        }
-    }
+        @NotBlank(message = "비밀번호는 필수입니다.")
+        @Size(min = 8, message = "비밀번호는 8자 이상이어야 합니다.")
+        String password) {
 }
