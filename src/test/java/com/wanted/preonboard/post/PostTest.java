@@ -3,6 +3,7 @@ package com.wanted.preonboard.post;
 import com.wanted.preonboard.common.ApiTest;
 import com.wanted.preonboard.common.Scenario;
 import com.wanted.preonboard.post.application.PostService;
+import com.wanted.preonboard.post.application.PostUpdateRequest;
 import com.wanted.preonboard.post.domain.PostRepository;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -95,5 +96,29 @@ class PostTest extends ApiTest {
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value());
         assertThat(response.extract().jsonPath().getLong("postId")).isEqualTo(postId);
+    }
+
+    @Test
+    void updatePost() {
+        final String accessToken = Scenario.signUpMember().request()
+                .signInMember().requestAndGetToken();
+        Scenario.createPost().request(accessToken);
+
+        final Long postId = 1L;
+        final String updatedContent = "updated content";
+        final String updatedTitle = "updated title";
+
+        final PostUpdateRequest request = new PostUpdateRequest(updatedTitle, updatedContent);
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .header("Authorization", accessToken)
+                .body(request)
+                .when()
+                .put("/posts/{postId}", postId)
+                .then().log().all()
+                .statusCode(HttpStatus.OK.value());
+
+        assertThat(postRepository.findById(postId).get().getContent()).isEqualTo(updatedContent);
     }
 }
