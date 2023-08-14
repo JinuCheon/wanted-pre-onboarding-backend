@@ -16,6 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class PostTest extends ApiTest {
 
     @Autowired private PostRepository postRepository;
+    @Autowired private PostService postService;
 
     @Test
     void createPost() {
@@ -80,4 +81,12 @@ class PostTest extends ApiTest {
         assertThat(response.extract().jsonPath().getList(".")).isEmpty();
     }
 
+    @Test
+    void getSinglePost() {
+        final String accessToken = Scenario.signUpMember().request()
+                .signInMember().requestAndGetToken();
+        Scenario.createPost().request(accessToken);
+
+        postService.getSinglePost(1L);
+    }
 }

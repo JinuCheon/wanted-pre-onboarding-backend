@@ -39,4 +39,11 @@ public class PostService {
                 .map(PostContentResponse::from)
                 .toList();
     }
+
+    @Transactional(readOnly = true)
+    public PostContentResponse getSinglePost(final Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다."));
+        return PostContentResponse.from(post);
+    }
 }
