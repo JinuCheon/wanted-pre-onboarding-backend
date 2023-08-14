@@ -96,4 +96,20 @@ class PostTest extends ApiTest {
                 .statusCode(HttpStatus.OK.value());
         assertThat(response.extract().jsonPath().getLong("postId")).isEqualTo(postId);
     }
+
+    @Test
+    void updatePost() {
+        final String accessToken = Scenario.signUpMember().request()
+                .signInMember().requestAndGetToken();
+        Scenario.createPost().request(accessToken);
+
+        final Long postId = 1L;
+        final Long memberId = 1L;
+        final String updatedContent = "updated content";
+        final String updatedTitle = "updated title";
+
+        postService.updatePost(memberId, postId, updatedTitle, updatedContent);
+
+        assertThat(postRepository.findById(postId).get().getContent()).isEqualTo(updatedContent);
+    }
 }
