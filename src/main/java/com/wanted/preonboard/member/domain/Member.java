@@ -11,6 +11,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
+import org.springframework.util.Assert;
 
 @Entity
 @Table(name = "member")
@@ -35,9 +36,16 @@ public class Member {
     private String password;
 
     public Member(final String nickname, final String email, final String password) {
+        validateConstructor(nickname, email, password);
         this.nickname = nickname;
         this.email = email;
         this.password = password;
+    }
+
+    private static void validateConstructor(final String nickname, final String email, final String password) {
+        Assert.hasText(nickname, "nickname must not be empty");
+        Assert.hasText(email, "email must not be empty");
+        Assert.hasText(password, "password must not be empty");
     }
 
     @VisibleForTesting
