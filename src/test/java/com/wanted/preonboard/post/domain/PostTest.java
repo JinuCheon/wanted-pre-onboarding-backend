@@ -25,4 +25,15 @@ class PostTest {
         assertThat(post.isAuthor(otherMember)).isFalse();
     }
 
+    @Test
+    void update() {
+        final Member member = new Member(1L, "email", "password", "name");
+        final Post post = new Post(member, "title", "content");
+
+        final String updatedTitle = "updatedTitle";
+        final String updatedContent = "updatedContent";
+        post.update(updatedTitle, updatedContent);
+
+        assertThat(post.getContent()).isEqualTo(updatedContent);
+    }
 }
