@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -53,6 +54,14 @@ public class PostController {
                                            @RequestBody @Valid final PostUpdateRequest request) {
         final Long memberId = UserContext.CONTEXT.get();
         postService.updatePost(memberId, postId, request);
+        return ResponseEntity.ok().build();
+    }
+
+    @Auth
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<Void> deletePost(@PathVariable("postId") final Long postId) {
+        final Long memberId = UserContext.CONTEXT.get();
+        postService.deletePost(memberId, postId);
         return ResponseEntity.ok().build();
     }
 

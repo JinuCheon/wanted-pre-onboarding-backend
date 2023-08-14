@@ -128,10 +128,15 @@ class PostTest extends ApiTest {
                 .signInMember().requestAndGetToken();
         Scenario.createPost().request(accessToken);
 
-        final Long memberId = 1L;
         final Long postId = 1L;
 
-        postService.deletePost(memberId, postId);
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .header("Authorization", accessToken)
+                .when()
+                .delete("/posts/{postId}", postId)
+                .then().log().all()
+                .statusCode(HttpStatus.OK.value());
 
         assertThat(postRepository.count()).isZero();
     }
