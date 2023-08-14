@@ -104,14 +104,20 @@ class PostTest extends ApiTest {
                 .signInMember().requestAndGetToken();
         Scenario.createPost().request(accessToken);
 
-        final Long memberId = 1L;
         final Long postId = 1L;
         final String updatedContent = "updated content";
         final String updatedTitle = "updated title";
 
-        final PostUpdateRequest request = new PostUpdateRequest(postId, updatedTitle, updatedContent);
+        final PostUpdateRequest request = new PostUpdateRequest(updatedTitle, updatedContent);
 
-        postService.updatePost(memberId, request);
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .header("Authorization", accessToken)
+                .body(request)
+                .when()
+                .put("/posts/{postId}", postId)
+                .then().log().all()
+                .statusCode(HttpStatus.OK.value());
 
         assertThat(postRepository.findById(postId).get().getContent()).isEqualTo(updatedContent);
     }

@@ -3,6 +3,7 @@ package com.wanted.preonboard.post.presentation;
 import com.wanted.preonboard.auth.Auth;
 import com.wanted.preonboard.auth.UserContext;
 import com.wanted.preonboard.post.application.PostService;
+import com.wanted.preonboard.post.application.PostUpdateRequest;
 import com.wanted.preonboard.post.dto.request.CreatePostRequest;
 import com.wanted.preonboard.post.dto.response.PostContentResponse;
 import jakarta.validation.Valid;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -43,6 +45,15 @@ public class PostController {
     @GetMapping("/{postId}")
     public ResponseEntity<PostContentResponse> getSinglePost(@PathVariable("postId") final Long postId) {
         return ResponseEntity.ok(postService.getSinglePost(postId));
+    }
+
+    @Auth
+    @PutMapping("/{postId}")
+    public ResponseEntity<Void> updatePost(@PathVariable("postId") final Long postId,
+                                           @RequestBody @Valid final PostUpdateRequest request) {
+        final Long memberId = UserContext.CONTEXT.get();
+        postService.updatePost(memberId, postId, request);
+        return ResponseEntity.ok().build();
     }
 
 }
