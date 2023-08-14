@@ -7,7 +7,6 @@ import com.wanted.preonboard.post.domain.PostRepository;
 import com.wanted.preonboard.post.dto.request.CreatePostRequest;
 import com.wanted.preonboard.post.dto.response.PostContentResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

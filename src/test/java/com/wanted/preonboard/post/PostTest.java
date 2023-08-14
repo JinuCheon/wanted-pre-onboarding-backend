@@ -55,7 +55,7 @@ class PostTest extends ApiTest {
                 .queryParam("page", 0)
                 .queryParam("size", 2)
                 .when()
-                .get("/posts")
+                .get("/posts/feed")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value());
         assertThat(response.extract().jsonPath().getList(".")).hasSize(2);
@@ -65,7 +65,7 @@ class PostTest extends ApiTest {
                 .queryParam("page", 1)
                 .queryParam("size", 2)
                 .when()
-                .get("/posts")
+                .get("/posts/feed")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value());
         assertThat(response.extract().jsonPath().getList(".")).hasSize(2);
@@ -75,7 +75,7 @@ class PostTest extends ApiTest {
                 .queryParam("page", 2)
                 .queryParam("size", 2)
                 .when()
-                .get("/posts")
+                .get("/posts/feed")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value());
         assertThat(response.extract().jsonPath().getList(".")).isEmpty();
@@ -87,6 +87,13 @@ class PostTest extends ApiTest {
                 .signInMember().requestAndGetToken();
         Scenario.createPost().request(accessToken);
 
-        postService.getSinglePost(1L);
+        final Long postId = 1L;
+        final ValidatableResponse response = RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/posts/{postId}", postId)
+                .then().log().all()
+                .statusCode(HttpStatus.OK.value());
+        assertThat(response.extract().jsonPath().getLong("postId")).isEqualTo(postId);
     }
 }
