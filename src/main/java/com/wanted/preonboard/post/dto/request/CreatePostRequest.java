@@ -1,10 +1,11 @@
 package com.wanted.preonboard.post.dto.request;
 
-import org.springframework.util.Assert;
 
-public record CreatePostRequest(String title, String content) {
-    public CreatePostRequest {
-        Assert.hasText(title, "title must not be empty");
-        Assert.hasText(content, "content must not be empty");
-    }
+import jakarta.validation.constraints.NotBlank;
+
+public record CreatePostRequest(
+        @NotBlank(message = "제목을 입력해주세요.")
+        String title,
+        @NotBlank(message = "내용을 입력해주세요.")
+        String content) {
 }
