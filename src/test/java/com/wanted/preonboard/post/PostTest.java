@@ -1,29 +1,38 @@
 package com.wanted.preonboard.post;
 
+import com.wanted.preonboard.common.ApiTest;
+import com.wanted.preonboard.common.Scenario;
 import com.wanted.preonboard.post.application.PostService;
 import com.wanted.preonboard.post.domain.PostRepository;
 import com.wanted.preonboard.post.dto.request.CreatePostRequest;
-import org.junit.jupiter.api.BeforeEach;
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
-class PostTest {
+class PostTest extends ApiTest {
 
     @Autowired private PostRepository postRepository;
-    @Autowired private PostService postService;
 
     @Test
     void createPost() {
+        final String accessToken = Scenario.signUpMember().request()
+                .signInMember().requestAndGetToken();
+
         final CreatePostRequest request = new CreatePostRequest(
                 "title",
                 "content"
         );
-        final Long memberId = 1L;
-        postService.createPost(memberId, request);
+        RestAssured.given().log().all()
+                .header("Authorization", accessToken)
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when().post("/posts")
+                .then().log().all()
+                .statusCode(HttpStatus.CREATED.value());
         assertThat(postRepository.findAll()).hasSize(1);
     }
 
