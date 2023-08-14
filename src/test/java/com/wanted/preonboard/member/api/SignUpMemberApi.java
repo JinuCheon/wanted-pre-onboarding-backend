@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 
 public class SignUpMemberApi {
     private String nickname = "nickname";
-    private String email = "woojin8787@gmail.com";
+    private String email = "test@gmail.com";
     private String password = "password1234";
 
     public SignUpMemberApi nickname(final String nickname) {

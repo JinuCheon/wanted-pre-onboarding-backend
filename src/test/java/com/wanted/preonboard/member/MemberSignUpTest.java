@@ -18,4 +18,10 @@ class MemberSignUpTest extends ApiTest {
         assertThat(memberRepository.findAll()).hasSize(1);
     }
 
+    @Test
+    void signIn() {
+        Scenario.signUpMember().request()
+                .signInMember().request();
+        assertThat(memberRepository.findAll()).hasSize(1);
+    }
 }

@@ -1,5 +1,6 @@
 package com.wanted.preonboard.auth;
 
+import com.wanted.preonboard.member.dto.response.SignInResponse;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Header;
@@ -26,19 +27,24 @@ public class AuthService {
     @Value("${jwt.expiration-hours}")
     private int expirationHours;
 
-    public String createToken(Long memberId) {
+    public SignInResponse createToken(Long memberId) {
+        final String token = generateToken(memberId);
+        return new SignInResponse(memberId, token);
+    }
+
+    private String generateToken(final Long memberId) {
         Date now = new Date();
         Date expiration = new Date(now.getTime() + Duration.ofHours(expirationHours).toMillis());
         Map<String, String> payloads = new HashMap<>();
         payloads.put("memberId", String.valueOf(memberId));
 
         return Jwts.builder()
-                .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
-                .setClaims(payloads)
-                .setIssuedAt(now)
-                .setExpiration(expiration)
-                .signWith(SignatureAlgorithm.HS256, Base64.getEncoder().encodeToString(secretKey.getBytes()))
-                .compact();
+            .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
+            .setClaims(payloads)
+            .setIssuedAt(now)
+            .setExpiration(expiration)
+            .signWith(SignatureAlgorithm.HS256, Base64.getEncoder().encodeToString(secretKey.getBytes()))
+            .compact();
     }
 
     public Long validateJwt(final String accessToken) {
