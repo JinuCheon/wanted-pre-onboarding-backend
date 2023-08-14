@@ -46,6 +46,7 @@ public class PostService {
         return PostContentResponse.from(post);
     }
 
+    @Transactional
     public void updatePost(final Long memberId, final Long postId, final PostUpdateRequest request) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
