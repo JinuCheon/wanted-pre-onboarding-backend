@@ -13,13 +13,13 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 import org.springframework.util.Assert;
 
+@Getter
 @Entity
 @Table(name = "member")
 @Comment("회원")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
 
-    @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
@@ -31,7 +31,6 @@ public class Member {
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @Getter
     @Column(name = "password", nullable = false)
     private String password;
 
