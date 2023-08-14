@@ -121,4 +121,23 @@ class PostTest extends ApiTest {
 
         assertThat(postRepository.findById(postId).get().getContent()).isEqualTo(updatedContent);
     }
+
+    @Test
+    void deletePost() {
+        final String accessToken = Scenario.signUpMember().request()
+                .signInMember().requestAndGetToken();
+        Scenario.createPost().request(accessToken);
+
+        final Long postId = 1L;
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .header("Authorization", accessToken)
+                .when()
+                .delete("/posts/{postId}", postId)
+                .then().log().all()
+                .statusCode(HttpStatus.OK.value());
+
+        assertThat(postRepository.count()).isZero();
+    }
 }

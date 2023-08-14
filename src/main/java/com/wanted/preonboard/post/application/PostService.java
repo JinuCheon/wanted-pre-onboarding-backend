@@ -46,13 +46,23 @@ public class PostService {
         return PostContentResponse.from(post);
     }
 
-    @Transactional
     public void updatePost(final Long memberId, final Long postId, final PostUpdateRequest request) {
-        Member member = memberRepository.getReferenceById(memberId);
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다."));
         if (!post.isAuthor(member)) throw new IllegalArgumentException("작성자가 아닙니다.");
 
         post.update(request.updatedTitle(), request.updatedContent());
+    }
+
+    @Transactional
+    public void deletePost(final Long memberId, final Long postId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다."));
+        if (!post.isAuthor(member)) throw new IllegalArgumentException("작성자가 아닙니다.");
+        postRepository.deleteById(postId);
     }
 }
