@@ -53,4 +53,14 @@ public class Post {
         return this.member.equals(member);
     }
 
+    public void update(final String updatedTitle, final String updatedContent) {
+        validateUpdate(updatedTitle, updatedContent);
+        this.title = updatedTitle;
+        this.content = updatedContent;
+    }
+
+    private void validateUpdate(final String updatedTitle, final String updatedContent) {
+        Assert.hasText(updatedTitle, "title must not be empty");
+        Assert.hasText(updatedContent, "content must not be empty");
+    }
 }

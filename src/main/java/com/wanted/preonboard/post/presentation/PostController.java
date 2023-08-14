@@ -34,14 +34,15 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/{postId}")
-    public ResponseEntity<PostContentResponse> getSinglePost(@PathVariable("postId") final Long postId) {
-        return ResponseEntity.ok(postService.getSinglePost(postId));
-    }
-
     @GetMapping("/feed")
     public ResponseEntity<List<PostContentResponse>> getFeedByPage(@RequestParam("page") final int page,
                                                                    @RequestParam("size") final int size) {
         return ResponseEntity.ok(postService.getFeedByPage(page, size));
     }
+
+    @GetMapping("/{postId}")
+    public ResponseEntity<PostContentResponse> getSinglePost(@PathVariable("postId") final Long postId) {
+        return ResponseEntity.ok(postService.getSinglePost(postId));
+    }
+
 }
