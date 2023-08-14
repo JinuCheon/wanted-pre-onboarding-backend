@@ -48,4 +48,9 @@ public class Post {
         Assert.hasText(title, "title must not be empty");
         Assert.hasText(content, "content must not be empty");
     }
+
+    public boolean isAuthor(final Member member) {
+        return this.member.equals(member);
+    }
+
 }
