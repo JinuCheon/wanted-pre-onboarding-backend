@@ -7,7 +7,11 @@ import com.wanted.preonboard.post.domain.PostRepository;
 import com.wanted.preonboard.post.dto.request.CreatePostRequest;
 import com.wanted.preonboard.post.dto.response.PostContentResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -28,7 +32,11 @@ public class PostService {
         postRepository.save(post);
     }
 
+    @Transactional(readOnly = true)
     public List<PostContentResponse> getFeedByPage(final int page, final int size) {
-        return null;
+        Pageable pageable = PageRequest.of(page, size);
+        return postRepository.findAll(pageable)
+                .map(PostContentResponse::from)
+                .toList();
     }
 }

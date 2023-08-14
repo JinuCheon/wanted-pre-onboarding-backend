@@ -25,7 +25,7 @@ class PostTest extends ApiTest {
     }
 
     @Test
-    void getFeed() {
+    void getFeedByPage() {
         final String accessToken = Scenario.signUpMember().request()
                 .signInMember().requestAndGetToken();
 
