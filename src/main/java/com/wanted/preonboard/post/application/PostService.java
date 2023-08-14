@@ -47,12 +47,12 @@ public class PostService {
     }
 
     @Transactional
-    public void updatePost(final Long memberId, final Long postId, final String updatedTitle, final String updatedContent) {
+    public void updatePost(final Long memberId, final PostUpdateRequest request) {
         Member member = memberRepository.getReferenceById(memberId);
-        Post post = postRepository.findById(postId)
+        Post post = postRepository.findById(request.postId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다."));
         if (!post.isAuthor(member)) throw new IllegalArgumentException("작성자가 아닙니다.");
 
-        post.update(updatedTitle, updatedContent);
+        post.update(request.updatedTitle(), request.updatedContent());
     }
 }
