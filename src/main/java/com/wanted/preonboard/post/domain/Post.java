@@ -1,12 +1,38 @@
 package com.wanted.preonboard.post.domain;
 
 import com.wanted.preonboard.member.domain.Member;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.util.Assert;
 
+@Entity
+@Table(name = "post")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Post {
-    private final Member member;
-    private final String title;
-    private final String content;
+
+    @Id
+    @Column(name = "post_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @JoinColumn(name = "member_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Member member;
+
+    @Column(name = "title", nullable = false)
+    private String title;
+
+    @Column(name = "content", nullable = false)
+    private String content;
 
     public Post(final Member member, final String title, final String content) {
         validateConstructor(member, title, content);
