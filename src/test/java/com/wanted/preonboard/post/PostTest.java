@@ -4,15 +4,18 @@ import com.wanted.preonboard.common.ApiTest;
 import com.wanted.preonboard.common.Scenario;
 import com.wanted.preonboard.post.application.PostService;
 import com.wanted.preonboard.post.domain.PostRepository;
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+import io.restassured.response.ValidatableResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class PostTest extends ApiTest {
 
     @Autowired private PostRepository postRepository;
-    @Autowired private PostService postService;
 
     @Test
     void createPost() {
@@ -46,10 +49,35 @@ class PostTest extends ApiTest {
                     .content("fourth content")
                     .request(accessToken);
 
-        assertThat(postRepository.findAll()).hasSize(4);
-        assertThat(postService.getFeedByPage(0, 2)).hasSize(2);
-        assertThat(postService.getFeedByPage(1, 2)).hasSize(2);
-        assertThat(postService.getFeedByPage(2, 2)).isEmpty();
+        ValidatableResponse response = RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .queryParam("page", 0)
+                .queryParam("size", 2)
+                .when()
+                .get("/posts")
+                .then().log().all()
+                .statusCode(HttpStatus.OK.value());
+        assertThat(response.extract().jsonPath().getList(".")).hasSize(2);
+
+        response = RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .queryParam("page", 1)
+                .queryParam("size", 2)
+                .when()
+                .get("/posts")
+                .then().log().all()
+                .statusCode(HttpStatus.OK.value());
+        assertThat(response.extract().jsonPath().getList(".")).hasSize(2);
+
+        response = RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .queryParam("page", 2)
+                .queryParam("size", 2)
+                .when()
+                .get("/posts")
+                .then().log().all()
+                .statusCode(HttpStatus.OK.value());
+        assertThat(response.extract().jsonPath().getList(".")).isEmpty();
     }
 
 }
